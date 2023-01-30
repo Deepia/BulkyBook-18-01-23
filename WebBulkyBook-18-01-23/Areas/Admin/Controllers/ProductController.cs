@@ -4,6 +4,7 @@ using BulkyBook.DataAccess;
 using BulkyBook.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BulkyBooks.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace WebBulkyBook_18_01_23.Controllers
 {
@@ -56,18 +57,18 @@ namespace WebBulkyBook_18_01_23.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(CoverType CoverType)
+        public IActionResult Upsert(ProductVM obj, IFormFile file)
         {
             
             if (ModelState.IsValid)
             {
-                _unitOfWork.CoverType.Update(CoverType);
+                //_unitOfWork.CoverType.Update(CoverType);
                 _unitOfWork.Save();
                 TempData["success"] = "CoverType updated successfuly";
                 return RedirectToAction("Index");
             }
 
-            return View(CoverType);
+            return View(obj);
         }
 
         public IActionResult Delete(int? id)
