@@ -1,7 +1,11 @@
 ﻿@model BulkyBooks.Models.ViewModels.ProductVM
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
-    <div class="border p-3 mt-4 row">
-        <div class="row pb-2">
+    <input asp-for="product.Id" hidden/>
+    <input asp-for="product.ImageUrl" hidden/>
+    <div class="row">
+        <div class="col-10">
+            <div class="border p-3 mt-4 row">
+        <div class="col-12 pb-2">
             <h2 class="text-primary">@(Model.product.Id!=0?"Update":"Create") Product</h2>
             <hr/>
         </div>
@@ -48,7 +52,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="product.ImageUrl"></label>
-            <input type="file" class="form-control"/>
+            <input type="file" id="uploadBox" name="file" class="form-control"/>
         </div>
         <div class="mb-3 col-6">
             <label asp-for="product.CategoryId"></label>
@@ -72,15 +76,42 @@
             }
             else
             {
-                <button type="submit" class="btn-primary btn" style="width:150px;">Create</button>
+                <button type="submit" onclick="return ValidateInput()" class="btn-primary btn" style="width:150px;">Create</button>
 
             }
-                    <a asp-controller="CoverType" asp-action="Index" class="btn-secondary btn" style="width:150px;">Back to List</a>
+                    <a asp-controller="Product" asp-action="Index" class="btn-secondary btn" style="width:150px;">Back to List</a>
         </div>
     </div>
+        </div>
+        <div class="col-2 pt-4">
+            <img src="@Model.product.ImageUrl" width="100%"
+            style="border-radius:5px; border: 1px solid #bbb9b9"/>
+        </div>
+
+    </div>
+    
 </form>
 @section Scripts{
     @{
         <partial name="_ValidationScriptsPartial" />
     }
+
+    <script>
+    tinymce.init({
+      selector: 'textarea',
+      plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+    });
+     function ValidateInput(){
+         if(document.getElementById("uploadBox").value==""){
+             Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Please upload an image!'
+            })
+            return false;
+         }
+         return true;
+     }
+    </script>
 }
